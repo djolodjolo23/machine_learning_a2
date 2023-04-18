@@ -74,7 +74,6 @@ beta_starting = np.zeros(Xe.shape[1])
 
 def gradientDescent(Xe, y, beta_starting, alpha, num_of_iterations, J_values):
     for i in range(num_of_iterations):
-        #gradient = Xe.T.dot(Xe.dot(beta_starting) - y) # first we compute the gradient, second part of the formula given in the assignment sheet
         beta_starting = beta_starting - alpha * (Xe.T.dot(Xe.dot(beta_starting) - y)) # first part of the formula given in the assignment sheet, # beta(j + 1) is the new beta, beta(j) is the current beta
         cost = cost_function(Xe, y, beta_starting) # we compute the cost function
         J_values.append(cost) # we append the cost function to the list
