@@ -10,6 +10,7 @@ def cost_function(Xe, y, beta, N):
 
 
 def normal_equation(Xe, y):
+    # if Xe first column contains ones, remove it
     return np.linalg.inv(Xe.T.dot(Xe)).dot(Xe.T).dot(y)
 
 
