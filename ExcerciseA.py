@@ -34,7 +34,6 @@ find_girls_height = test_parents.dot(beta) #prediction for any point
 
 mu = np.mean(Xe, axis=0)
 sigma = np.std(Xe, axis=0)
-
 Xn = (Xe - mu) / sigma
 
 '''''
@@ -70,9 +69,9 @@ y = y
 alpha = 0.001
 num_of_iterations = 250
 
-beta_starting = np.zeros(Xe.shape[1])
 
-def gradientDescent(Xe, y, beta_starting, alpha, num_of_iterations, J_values):
+def gradientDescent(Xe, y, alpha, num_of_iterations, J_values):
+    beta_starting = np.zeros(Xe.shape[1])
     for i in range(num_of_iterations):
         beta_starting = beta_starting - alpha * (Xe.T.dot(Xe.dot(beta_starting) - y)) # first part of the formula given in the assignment sheet, # beta(j + 1) is the new beta, beta(j) is the current beta
         cost = cost_function(Xe, y, beta_starting) # we compute the cost function
@@ -87,7 +86,7 @@ def gradientDescent(Xe, y, beta_starting, alpha, num_of_iterations, J_values):
 
 J_values = []
 
-beta4 = gradientDescent(XeNormalized, y, beta_starting, alpha, num_of_iterations, J_values)
+beta4 = gradientDescent(XeNormalized, y, alpha, num_of_iterations, J_values)
 
 plt.plot(range(num_of_iterations), J_values)
 plt.xlabel('Number of iterations')
