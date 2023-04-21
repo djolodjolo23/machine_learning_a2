@@ -1,5 +1,3 @@
-
-
 import numpy as np
 
 
@@ -28,17 +26,3 @@ def feature_normalization(Xe):
     sigma = np.std(Xe, axis=0)
     return (Xe - mu) / sigma
 
-
-def polynomial_function(x, beta, degree):
-    y_pred = np.zeros_like(x)
-    # Loop through each degree from 0 to d and compute the corresponding term
-    for i in range(degree + 1):
-        y_pred += beta * x ** i
-    return y_pred
-
-
-def polynomial_features(x, degree):
-    X = np.ones((len(x), 1))
-    for i in range(1, degree + 1):
-        X = np.hstack((X, np.power(x, i)))
-    return X
