@@ -101,8 +101,23 @@ plt.pcolormesh(xx, yy, clz_mesh, cmap=cmap_light)
 plt.scatter(Xn[:, 0], Xn[:, 1], c=y_train, cmap=cmap_bold)
 plt.show()
 
+# 7. find admission probability for a student with scored 45, 85. It should be 0.77, and the number of training errors is 11.
 
 
+
+student = np.array([1, 45, 85])
+student_normalized = f.feature_normalization(student)
+
+D = 2
+student_extended = np.ones(1)
+for i in range(1, D+1):
+    for j in range(0, i+1):
+        Xnew = student_normalized[0]**(i - j)*student_normalized[1]**j
+        student_extended = np.append(student_extended, Xnew)
+student_extended = student_extended.reshape(1, -1)
+
+p = sigmoid(np.dot(student_extended, beta))
+print(p)
 
 
 
