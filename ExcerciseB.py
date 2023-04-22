@@ -14,8 +14,9 @@ data = pd.read_csv('data/admission.csv').to_numpy()
 
 random_state = np.random.randint(1, 301)
 # splitting the data into training and testing (80-20)
-X_train, X_test, y_train, y_test = train_test_split(data[:, :2], data[:, 2], test_size=0.2, random_state=random_state)
-
+#X_train, y_train = train_test_split(data[:, :2], data[:, 2], random_state=random_state)
+X_train = data[:, :2]
+y_train = data[:, 2]
 # Normalazing the features
 Xn = f.feature_normalization(X_train)
 
@@ -39,7 +40,7 @@ def sigmoid(z):
 
 test_array = np.array([[0,1], [2, 3]])
 
-z = sigmoid(-1)
+testingsigmoid = sigmoid(test_array)
 
 #print(sigmoid(test_array))
 
@@ -69,7 +70,7 @@ def gradient_descent_logistic(Xe, y, alpha, num_of_iterations, J_values=None):
     return beta_starting
 
 J_values = []
-beta_gradient = gradient_descent_logistic(Xe, y_train, 0.5, 600, J_values)
+beta_gradient = gradient_descent_logistic(Xe, y_train, 0.5, 500, J_values)
 def mapFeature(X1, X2, D):
     one = np.ones(X1.shape[0])
     Xe = np.c_[one, X1, X2]
@@ -105,20 +106,21 @@ plt.show()
 
 
 
-student = np.array([1, 45, 85])
+student = np.array([45, 85])
 student_normalized = f.feature_normalization(student)
+Sne = np.c_[1, student_normalized[0], student_normalized[1]]
+prob = sigmoid(np.dot(Sne, beta_gradient))
+print(f"Admission probability with scores {student[0]}, {student[1]} is {prob[0]}")
 
-D = 2
-student_extended = np.ones(1)
-for i in range(1, D+1):
-    for j in range(0, i+1):
-        Xnew = student_normalized[0]**(i - j)*student_normalized[1]**j
-        student_extended = np.append(student_extended, Xnew)
-student_extended = student_extended.reshape(1, -1)
-
-p = sigmoid(np.dot(student_extended, beta))
-print(p)
-
+#p = sigmoid(np.dot(student_normalized, beta_gradient))
+#print(p)
+Xe = np.array([np.ones(Xn.shape[0]), Xn[:, 0], Xn[:, 1]]).T
+# training errors
+z = np.dot(Xe, beta_gradient).reshape(-1, 1)
+p = sigmoid(z)
+pp = np.round(p)
+yy = y_train.reshape(-1, 1)
+print("Training errors: ", np.sum(yy!= pp))
 
 
 
