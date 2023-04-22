@@ -41,7 +41,7 @@ test_array = np.array([[0,1], [2, 3]])
 
 z = sigmoid(-1)
 
-print(sigmoid(test_array))
+#print(sigmoid(test_array))
 
 # extend X to make it suitable for a linear assumption
 
@@ -70,24 +70,29 @@ def gradient_descent_logistic(Xe, y, alpha, num_of_iterations, J_values=None):
 
 J_values = []
 beta_gradient = gradient_descent_logistic(Xe, y_train, 0.5, 600, J_values)
-def mapFeature(x1, x2, degree):
-    out = np.ones(x1.shape[0])
-    for i in range(1, degree + 1):
-        for j in range(i + 1):
-            out = np.vstack((out, (x1 ** (i - j)) * (x2 ** j)))
-    return out.T
+def mapFeature(X1, X2, D):
+    one = np.ones(X1.shape[0])
+    Xe = np.c_[one, X1, X2]
+    for i in range(2, D+1):
+        for j in range (0, i+1):
+            Xnew = X1**(i - j)*X2**j
+            Xnew = Xnew.reshape(-1, 1)
+            Xe = np.append(Xe, Xnew, 1)
+    return Xe
 
 # plot a decision boundary
-h = 0.01 # step size in the mesh
+h = .01 # step size in the mesh
 x_min, x_max = Xn[:, 0].min() -0.1, Xn[:, 0].max()+0.1
 y_min, y_max = Xn[:, 1].min() -0.1, Xn[:, 1].max()+0.1
 xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 x1, x2 = xx.ravel(), yy.ravel()
 Xxe = mapFeature(x1, x2, 2)
-p = sigmoid(np.dot(Xxe, beta_gradient))
-classes = p > 0.5
-clz_mesh = classes.reshape(xx.shape)
-
+# predict the labels for the Xxe mesh grid with the beta_gradient
+Xe = mapFeature(Xn[:, 0], Xn[:, 1], 2) # extend X to make it suitable for a linear assumption
+beta = gradient_descent_logistic(Xe, y_train, 0.5, 600) # find the beta that minimizes the cost function
+p = sigmoid(np.dot(Xxe, beta)) # predict the labels for the Xxe mesh grid with the beta_gradient
+classes = p > 0.5 # convert the probabilities to classes
+clz_mesh = classes.reshape(xx.shape) # reshape the classes to the mesh grid shape
 cmap_light = ListedColormap(['#FFAAAA', '#AAFFAA', '#AAAAFF'])
 cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
 
