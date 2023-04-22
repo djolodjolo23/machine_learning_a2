@@ -125,5 +125,3 @@ print("Training errors: ", np.sum(yy!= pp))
 
 
 
-
-
