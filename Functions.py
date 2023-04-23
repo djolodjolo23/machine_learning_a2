@@ -35,17 +35,17 @@ def logistic_cost_function(Xe, y, beta, N): # g is sigmoid function here
     return -1 / N * (y.T.dot(np.log(sigmoid(Xe.dot(beta)))) + (1 - y).T.dot(np.log(1 - sigmoid(Xe.dot(beta)))))
 
 
-def gradient_descent_logistic(Xe, y, alpha, num_of_iterations, J_values=None):
+def gradient_descent_logistic(Xe, y, alpha, num_of_iterations):
+    betas, J_values = [], []
     beta_starting = np.zeros(Xe.shape[1])
     cost = logistic_cost_function(Xe, y, beta_starting, len(y))
-    if J_values is not None:
-        J_values.append(cost)
+    J_values.append(cost)
     for i in range(num_of_iterations):
         beta_starting = beta_starting - (alpha / len(y) * Xe.T).dot(sigmoid(Xe.dot(beta_starting)) - y)
-        if J_values is not None:
-            cost = logistic_cost_function(Xe, y, beta_starting, len(y))
-            J_values.append(cost)
-    return beta_starting
+        betas.append(beta_starting)
+        cost = logistic_cost_function(Xe, y, beta_starting, len(y))
+        J_values.append(cost)
+    return betas, J_values
 
 
 def mapFeature(X1, X2, D):
