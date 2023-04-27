@@ -48,9 +48,12 @@ def gradient_descent_logistic(Xe, y, alpha, num_of_iterations):
     return betas, J_values
 
 
-def mapFeature(X1, X2, D):
-    one = np.ones(X1.shape[0])
-    Xe = np.c_[one, X1, X2]
+def mapFeature(X1, X2, D, ones=None):
+    if ones is None or ones:
+        one = np.ones(X1.shape[0])
+        Xe = np.c_[one, X1, X2]
+    elif ones is False:
+        Xe = np.c_[X1, X2]
     for i in range(2, D + 1):
         for j in range(0, i + 1):
             Xnew = X1 ** (i - j) * X2 ** j
