@@ -22,21 +22,19 @@ num_of_features = x_train.shape[1]
 def feature_selection():
     models = []
     base = np.ones((x_train.shape[0], 1))
+    #M0
     models.append(base)
-    Model0 = LinearRegression()
-    Model0.fit(base, y_train)
-    y_pred = Model0.predict(base)
-    mse = ((y_pred - y_train) ** 2).mean()
+    mse = 0
     base_temp = np.empty((x_train.shape[0], 1))
     for i in range(num_of_features):
         for j in range(num_of_features):
             current_feature = x_train[:, j].reshape(-1,1)
             new_base = np.c_[base, current_feature]
-            Model = LinearRegression()
-            Model.fit(new_base, y_train)
-            y_pred = Model.predict(new_base)
+            model = LinearRegression()
+            model.fit(new_base, y_train)
+            y_pred = model.predict(new_base)
             mse_current = ((y_pred - y_train) ** 2).mean()
-            if mse_current < mse:
+            if mse == 0 or mse_current < mse:
                 mse = mse_current
                 base_temp = new_base
             np.delete(new_base, 1, axis=1)
@@ -46,5 +44,5 @@ def feature_selection():
 
 
 models = feature_selection()
-print(models[0].shape)
+print(models[2])
 
