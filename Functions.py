@@ -71,15 +71,17 @@ def training_errors(Xe_norm, beta, y_train):
 
 
 def feature_selection(x_train, y_train, num_of_features, LinearRegression):
+    x = x_train
     models = []
     base = np.ones((x_train.shape[0], 1))
     #M0
-    models.append(base)
+    models.append((base, []))
     mse = 0
+    index = 0
     base_temp = np.empty((x_train.shape[0], 1))
     for i in range(num_of_features):
-        for j in range(num_of_features):
-            current_feature = x_train[:, j].reshape(-1,1)
+        for j in range(num_of_features - i):
+            current_feature = x[:, j].reshape(-1,1)
             new_base = np.c_[base, current_feature]
             model = LinearRegression()
             model.fit(new_base, y_train)
@@ -88,7 +90,15 @@ def feature_selection(x_train, y_train, num_of_features, LinearRegression):
             if mse == 0 or mse_current < mse:
                 mse = mse_current
                 base_temp = new_base
+                index = j
             np.delete(new_base, 1, axis=1)
-        models.append(base_temp)
+        column_to_find = base_temp[:, -1]
+        col_num = None
+        for i in range(x_train.shape[1]):
+            if np.array_equal(x_train[:, i], column_to_find):
+                col_num = i
+                break
+        models.append((base_temp, models[-1][1] + [col_num]))
         base = base_temp
+        x = np.delete(x, index, axis=1)
     return models
