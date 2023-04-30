@@ -83,9 +83,9 @@ def feature_selection(x_train, y_train, num_of_features, LinearRegression):
         for j in range(num_of_features - i):
             current_feature = x[:, j].reshape(-1,1)
             new_base = np.c_[base, current_feature]
-            model = LinearRegression()
-            model.fit(new_base, y_train)
-            y_pred = model.predict(new_base)
+            linreg = LinearRegression()
+            linreg.fit(new_base, y_train)
+            y_pred = linreg.predict(new_base)
             mse_current = ((y_pred - y_train) ** 2).mean()
             if mse == 0 or mse_current < mse:
                 mse = mse_current
